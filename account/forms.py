@@ -25,11 +25,13 @@ class SignupForm(forms.Form):
         label=_("Password"),
         widget=forms.PasswordInput(render_value=False)
     )
-    password_confirm = forms.CharField(
-        label=_("Password (again)"),
-        widget=forms.PasswordInput(render_value=False)
-    )
+
     email = forms.EmailField(widget=forms.TextInput(), required=True)
+   
+    subscribe_to_newsletter = forms.BooleanField(label=_("Subscribe to newsletter"), 
+							initial=True, required=False
+						)
+	
     code = forms.CharField(
         max_length=64,
         required=False,
@@ -52,9 +54,6 @@ class SignupForm(forms.Form):
         raise forms.ValidationError(_("A user is registered with this email address."))
     
     def clean(self):
-        if "password" in self.cleaned_data and "password_confirm" in self.cleaned_data:
-            if self.cleaned_data["password"] != self.cleaned_data["password_confirm"]:
-                raise forms.ValidationError(_("You must type the same password each time."))
         return self.cleaned_data
 
 
@@ -65,7 +64,7 @@ class LoginForm(forms.Form):
         widget=forms.PasswordInput(render_value=False)
     )
     remember = forms.BooleanField(
-        label = _("Remember Me"),
+        label = _("Stay signed in"),
         required = False
     )
     user = None

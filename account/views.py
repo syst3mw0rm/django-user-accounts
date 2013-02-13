@@ -164,6 +164,7 @@ class SignupView(FormView):
         return user
     
     def create_account(self, form):
+	self.request.form = form
         return Account.create(request=self.request, user=self.created_user, create_email=False)
     
     def generate_username(self, form):
@@ -275,6 +276,8 @@ class LogoutView(TemplateResponseMixin, View):
     def get(self, *args, **kwargs):
         if not self.request.user.is_authenticated():
             return redirect(self.get_redirect_url())
+	else:
+	    auth.logout(self.request)
         ctx = self.get_context_data()
         return self.render_to_response(ctx)
     
@@ -609,6 +612,7 @@ class SettingsView(LoginRequiredMixin, FormView):
             initial["email"] = self.primary_email_address.email
         initial["timezone"] = self.request.user.account.timezone
         initial["language"] = self.request.user.account.language
+	initial["subscribe_to_newsletter"] = self.request.user.account.subscribe_to_newsletter
         return initial
     
     def form_valid(self, form):

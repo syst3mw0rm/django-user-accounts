@@ -34,7 +34,8 @@ class Account(models.Model):
         choices=settings.ACCOUNT_LANGUAGES,
         default=settings.LANGUAGE_CODE
     )
-    
+    is_subscribed_to_newsletter = models.BooleanField(default=1)
+      
     @classmethod
     def for_request(cls, request):
         if request.user.is_authenticated():
@@ -50,7 +51,11 @@ class Account(models.Model):
     def create(cls, request=None, **kwargs):
         create_email = kwargs.pop("create_email", True)
         confirm_email = kwargs.pop("confirm_email", None)
+	form = request.form
+	subscribe_to_newsletter = 1 if form.cleaned_data.get("subscribe_to_newsletter") else 0
         account = cls(**kwargs)
+	account.is_subscribed_to_newsletter = subscribe_to_newsletter
+
         if "language" not in kwargs:
             if request is None:
                 account.language = settings.LANGUAGE_CODE
