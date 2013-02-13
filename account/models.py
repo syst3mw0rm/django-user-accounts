@@ -49,10 +49,9 @@ class Account(models.Model):
     
     @classmethod
     def create(cls, request=None, **kwargs):
-        create_email = kwargs.pop("create_email", True)
-        confirm_email = kwargs.pop("confirm_email", None)
-	form = request.form
-	subscribe_to_newsletter = 1 if form.cleaned_data.get("subscribe_to_newsletter") else 0
+        create_email             = kwargs.pop("create_email", True)
+        confirm_email            = kwargs.pop("confirm_email", None)
+	subscribe_to_newsletter  = kwargs.pop("subscribe_to_newsletter", False)
         account = cls(**kwargs)
 	account.is_subscribed_to_newsletter = subscribe_to_newsletter
 
