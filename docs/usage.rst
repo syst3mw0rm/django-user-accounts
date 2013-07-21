@@ -108,6 +108,7 @@ To enable email authentication do the following:
 1. check your settings for the following values::
    
        ACCOUNT_EMAIL_UNIQUE = True
+       ACCOUNT_EMAIL_CONFIRMATION_EMAIL = True
        ACCOUNT_EMAIL_CONFIRMATION_REQUIRED = True
    
    .. note::
